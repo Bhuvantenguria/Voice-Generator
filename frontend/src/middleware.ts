@@ -1,22 +1,21 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { authMiddleware } from "@clerk/nextjs";
 
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  // Add your middleware logic here
-  return NextResponse.next()
-}
-
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+export default authMiddleware({
+  // Public routes that don't require authentication
+  publicRoutes: [
+    "/",
+    "/about",
+    "/api/webhook",
+    "/api/create-checkout-session",
   ],
-} 
+  
+  // Routes that can be accessed while signed out
+  ignoredRoutes: [
+    "/api/webhook",
+    "/api/create-checkout-session"
+  ],
+});
+
+export const config = {
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+}; 

@@ -1,115 +1,146 @@
-import Link from 'next/link'
-import { SignedIn, SignedOut } from '@clerk/nextjs'
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import { Mic2, Wand2, Bot, Sparkles, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import FreeTTS from '@/components/FreeTTS';
+import PremiumFeatures from '@/components/PremiumFeatures';
+
+const fadeInUp = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
-      <h1 className="text-5xl font-bold text-gray-900 mb-6">
-        🎙️ AI Voiceover Generator
-      </h1>
-      <p className="text-xl text-gray-600 mb-8 max-w-2xl">
-        Create professional voiceovers for your Reels & Shorts in seconds using advanced AI technology.
-        Multiple languages, voices, and styles available.
-      </p>
-      
-      <div className="flex gap-4">
-        <SignedIn>
-          <Link 
-            href="/generate" 
-            className="btn-primary"
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/5 to-background blur-3xl" />
+        <div className="container relative mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+            className="text-center max-w-4xl mx-auto"
           >
-            Start Generating
-          </Link>
-          <Link 
-            href="/dashboard" 
-            className="btn-secondary"
-          >
-            View Dashboard
-          </Link>
-        </SignedIn>
-        <SignedOut>
-          <Link 
-            href="/sign-up" 
-            className="btn-primary"
-          >
-            Get Started
-          </Link>
-          <Link 
-            href="/about" 
-            className="btn-secondary"
-          >
-            Learn More
-          </Link>
-        </SignedOut>
-      </div>
-      
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-        <FeatureCard
-          title="Multiple Languages"
-          description="Generate voiceovers in various languages and accents for global reach."
-          icon="🌍"
-        />
-        <FeatureCard
-          title="Expressive Tones"
-          description="Choose from different emotional styles and tones to match your content."
-          icon="🎭"
-        />
-        <FeatureCard
-          title="Quick Export"
-          description="Download your voiceovers instantly in high-quality audio formats."
-          icon="⚡"
-        />
-      </div>
-
-      <div className="mt-16 bg-primary-50 w-full py-12 rounded-lg">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">
-          How It Works
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-          <StepCard
-            number={1}
-            title="Sign Up"
-            description="Create your account in seconds"
-          />
-          <StepCard
-            number={2}
-            title="Write Text"
-            description="Enter or paste your script"
-          />
-          <StepCard
-            number={3}
-            title="Choose Voice"
-            description="Select language and style"
-          />
-          <StepCard
-            number={4}
-            title="Generate"
-            description="Get your voiceover instantly"
-          />
+            <motion.h1
+              variants={fadeInUp}
+              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
+            >
+              Transform Your Voice with AI
+            </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              className="text-xl text-muted-foreground mb-8"
+            >
+              Create natural, expressive voices for your content using cutting-edge 
+              AI technology. Perfect for content creators, developers, and businesses.
+            </motion.p>
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-wrap justify-center gap-4"
+            >
+              <Link href="/generate">
+                <Button size="lg" className="group">
+                  Get Started
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button size="lg" variant="outline">
+                  Learn More
+                </Button>
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
-    </div>
-  )
-}
+      </section>
 
-function FeatureCard({ title, description, icon }: { title: string; description: string; icon: string }) {
-  return (
-    <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      <div className="text-3xl mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
-    </div>
-  )
-}
+      {/* Features Section */}
+      <section className="py-20 bg-accent/50">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <motion.div
+              variants={fadeInUp}
+              className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors"
+            >
+              <Mic2 className="h-12 w-12 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Voice Generation</h3>
+              <p className="text-muted-foreground">
+                Generate natural-sounding voices in multiple languages and accents.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={fadeInUp}
+              className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors"
+            >
+              <Wand2 className="h-12 w-12 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Voice Cloning</h3>
+              <p className="text-muted-foreground">
+                Clone any voice with just a few minutes of sample audio.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={fadeInUp}
+              className="p-6 rounded-2xl bg-card border hover:border-primary/50 transition-colors"
+            >
+              <Bot className="h-12 w-12 text-primary mb-4" />
+              <h3 className="text-xl font-semibold mb-2">AI Enhancement</h3>
+              <p className="text-muted-foreground">
+                Advanced AI processing for clear, emotion-rich voice output.
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
-function StepCard({ number, title, description }: { number: number; title: string; description: string }) {
-  return (
-    <div className="text-center">
-      <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-        {number}
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      {/* Free TTS Demo Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="text-center max-w-3xl mx-auto mb-12"
+          >
+            <motion.div variants={fadeInUp}>
+              <Sparkles className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h2 className="text-3xl font-bold mb-4">Try It Now</h2>
+              <p className="text-lg text-muted-foreground">
+                Experience the power of our voice generation technology with this free demo.
+              </p>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <FreeTTS />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Premium Features Section */}
+      <section className="py-20 bg-accent/50">
+        <div className="container mx-auto px-4">
+          <PremiumFeatures />
+        </div>
+      </section>
     </div>
-  )
+  );
 } 

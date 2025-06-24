@@ -1,186 +1,93 @@
-'use client'
+import VoiceGeneratorForm from "@/components/VoiceGeneratorForm";
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-const voiceSchema = z.object({
-  text: z.string().min(1, 'Text is required').max(5000, 'Text must be less than 5000 characters'),
-  language: z.string().min(1, 'Language is required'),
-  voice: z.string().min(1, 'Voice is required'),
-  speed: z.number().min(0.5).max(2),
-  pitch: z.number().min(-20).max(20),
-})
-
-type VoiceFormData = z.infer<typeof voiceSchema>
-
-const languages = [
-  { value: 'en-US', label: 'English (US)' },
-  { value: 'en-GB', label: 'English (UK)' },
-  { value: 'es-ES', label: 'Spanish' },
-  { value: 'fr-FR', label: 'French' },
-  { value: 'de-DE', label: 'German' },
-]
-
-const voices = [
-  { value: 'voice1', label: 'Emma (Female)' },
-  { value: 'voice2', label: 'James (Male)' },
-  { value: 'voice3', label: 'Sophie (Female)' },
-  { value: 'voice4', label: 'Michael (Male)' },
-]
+export const metadata = {
+  title: "Generate Voice | Voice Generator",
+  description: "Generate AI voiceovers with custom voice cloning and script optimization",
+};
 
 export default function GeneratePage() {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [audioUrl, setAudioUrl] = useState<string | null>(null)
-
-  const { register, handleSubmit, formState: { errors } } = useForm<VoiceFormData>({
-    resolver: zodResolver(voiceSchema),
-    defaultValues: {
-      speed: 1,
-      pitch: 0,
-    },
-  })
-
-  const onSubmit = async (data: VoiceFormData) => {
-    setIsGenerating(true)
-    try {
-      // TODO: Implement API call to generate voice
-      console.log('Generating voice with data:', data)
-      await new Promise(resolve => setTimeout(resolve, 2000)) // Simulated delay
-      setAudioUrl('https://example.com/sample.mp3') // Replace with actual generated audio URL
-    } catch (error) {
-      console.error('Error generating voice:', error)
-    } finally {
-      setIsGenerating(false)
-    }
-  }
-
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
           Generate Voice
         </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300">
+          Transform your text into natural-sounding voices using our advanced AI technology.
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Text Input */}
-          <div>
-            <label htmlFor="text" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Text to Convert
-            </label>
-            <textarea
-              id="text"
-              rows={5}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter the text you want to convert to speech..."
-              {...register('text')}
-            />
-            {errors.text && (
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.text.message}</p>
-            )}
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="p-6">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Voice Generator</h2>
+            </div>
+            <VoiceGeneratorForm />
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Quick Tips</h2>
+            </div>
+            <ul className="space-y-4 text-gray-600 dark:text-gray-300">
+              <li className="flex items-start space-x-3">
+                <span className="text-green-500">•</span>
+                <span>Keep sentences clear and concise for better voice generation</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="text-green-500">•</span>
+                <span>Use proper punctuation to help with natural pauses</span>
+              </li>
+              <li className="flex items-start space-x-3">
+                <span className="text-green-500">•</span>
+                <span>Consider the context and emotion you want to convey</span>
+              </li>
+            </ul>
           </div>
 
-          {/* Language Selection */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="language" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Language
-              </label>
-              <select
-                id="language"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                {...register('language')}
-              >
-                <option value="">Select Language</option>
-                {languages.map(lang => (
-                  <option key={lang.value} value={lang.value}>
-                    {lang.label}
-                  </option>
-                ))}
-              </select>
-              {errors.language && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.language.message}</p>
-              )}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">Voice Styles</h2>
             </div>
-
-            {/* Voice Selection */}
-            <div>
-              <label htmlFor="voice" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Voice
-              </label>
-              <select
-                id="voice"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                {...register('voice')}
-              >
-                <option value="">Select Voice</option>
-                {voices.map(voice => (
-                  <option key={voice.value} value={voice.value}>
-                    {voice.label}
-                  </option>
-                ))}
-              </select>
-              {errors.voice && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.voice.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Speed and Pitch Controls */}
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="speed" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Speed (0.5x - 2x)
-              </label>
-              <input
-                type="range"
-                id="speed"
-                min="0.5"
-                max="2"
-                step="0.1"
-                className="w-full"
-                {...register('speed', { valueAsNumber: true })}
-              />
-            </div>
-            <div>
-              <label htmlFor="pitch" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Pitch (-20 to +20)
-              </label>
-              <input
-                type="range"
-                id="pitch"
-                min="-20"
-                max="20"
-                className="w-full"
-                {...register('pitch', { valueAsNumber: true })}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1">Natural</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Perfect for casual content</p>
+              </div>
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1">Professional</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Ideal for business</p>
+              </div>
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1">Energetic</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Great for ads</p>
+              </div>
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="font-medium text-gray-900 dark:text-white mb-1">Calm</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Perfect for meditation</p>
+              </div>
             </div>
           </div>
-
-          {/* Generate Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={isGenerating}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isGenerating ? 'Generating...' : 'Generate Voice'}
-            </button>
-          </div>
-        </form>
-
-        {/* Audio Preview */}
-        {audioUrl && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Preview</h2>
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </div>
-        )}
+        </div>
       </div>
     </div>
-  )
+  );
 } 
