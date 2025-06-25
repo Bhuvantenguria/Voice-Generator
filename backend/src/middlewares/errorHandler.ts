@@ -1,39 +1,23 @@
-import { Request, Response, NextFunction } from 'express'
-import { logger } from '../utils/logger'
-
-export class AppError extends Error {
-  constructor(
-    public statusCode: number,
-    public message: string,
-    public isOperational = true
-  ) {
-    super(message)
-    Object.setPrototypeOf(this, AppError.prototype)
-  }
-}
+import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import { BadRequestError } from '../utils/errors';
 
 export const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
+  error: FastifyError,
+  request: FastifyRequest,
+  reply: FastifyReply
 ) => {
-  if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
-      status: 'error',
-      message: err.message,
-    })
+  // Log the error
+  request.log.error(error);
+
+  // Handle different types of errors
+  if (error.statusCode) {
+    return reply.status(error.statusCode).send({
+      error: error.message
+    });
   }
 
-  logger.error('Unhandled error:', {
-    error: err.message,
-    stack: err.stack,
-    path: req.path,
-    method: req.method,
-  })
-
-  return res.status(500).json({
-    status: 'error',
-    message: 'Internal server error',
-  })
-} 
+  // Default error response
+  return reply.status(500).send({
+    error: 'Internal Server Error'
+  });
+}; 
